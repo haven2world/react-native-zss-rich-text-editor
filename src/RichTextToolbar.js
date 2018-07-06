@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {polyfill} from 'react-lifecycles-compat';
 import PropTypes from 'prop-types';
 import {ListView, View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import {actions} from './const';
@@ -21,7 +22,7 @@ const defaultIcons = {
   [actions.insertLink]: require('../img/icon_format_link.png'),
 };
 
-export default class RichTextToolbar extends Component {
+class RichTextToolbar extends Component {
 
   static propTypes = {
     getEditor: PropTypes.func.isRequired,
@@ -47,7 +48,7 @@ export default class RichTextToolbar extends Component {
     };
   }
 
-  componentDidReceiveProps(newProps) {
+  componentDidUpdate(newProps) {
     const actions = newProps.actions ? newProps.actions : defaultActions;
     this.setState({
       actions,
@@ -179,6 +180,10 @@ export default class RichTextToolbar extends Component {
     }
   }
 }
+
+polyfill(RichTextToolbar);
+
+export default RichTextToolbar;
 
 const styles = StyleSheet.create({
   defaultSelectedButton: {
