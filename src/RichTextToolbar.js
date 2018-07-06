@@ -49,11 +49,13 @@ class RichTextToolbar extends Component {
   }
 
   componentDidUpdate(newProps) {
-    const actions = newProps.actions ? newProps.actions : defaultActions;
-    this.setState({
-      actions,
-      ds: this.state.ds.cloneWithRows(this.getRows(actions, this.state.selectedItems))
-    });
+    if (newProps.actions !== this.props.actions) {
+      const actions = newProps.actions ? newProps.actions : defaultActions;
+      this.setState({
+        actions,
+        ds: this.state.ds.cloneWithRows(this.getRows(actions, this.state.selectedItems))
+      });
+    }
   }
 
   getRows(actions, selectedItems) {
