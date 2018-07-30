@@ -778,30 +778,6 @@
 				return multi_parser.output.join('');
 			}
 
-			function getMirrorInfo(element) {
-				if (element.mirrorInfo) {
-					return element.mirrorInfo;
-				}
-
-				var div = document.createElement('div');
-				var style = div.style;
-				var hidden = 'hidden';
-				var focusOut = 'focusout';
-				style.whiteSpace = 'pre-wrap';
-				style.wordWrap = 'break-word';
-				style.position = 'absolute';
-				style.visibility = hidden;
-				style.overflow = hidden;
-				document.body.appendChild(div);
-				element.mirrorInfo = { div: div, span: document.createElement('span') };
-				element.addEventListener(focusOut, function cleanup() {
-					delete element.mirrorInfo;
-					document.body.removeChild(div);
-					element.removeEventListener(focusOut, cleanup);
-				});
-				return element.mirrorInfo;
-			}
-
 			/*!
 			 *
 			 * ZSSRichTextEditor v0.5.2
@@ -1052,36 +1028,21 @@
 				var range = selection.getRangeAt(0);
 				var container = range.endContainer;
 				var selectedNode = container.nodeType === 3 ? container.parentNode : container;
-				var position = selectedNode.selectionEnd;
-				var _a = getMirrorInfo(selectedNode);
-				var div = _a.div;
-				var span = _a.span;
-				var content = selectedNode.textContent.substring(0, position);
-
-				div.textContent = content;
-				span.textContent = (selectedNode.textContent.substring(position)) || '.';
-				div.appendChild(span);
-
 				var rect = selectedNode.getBoundingClientRect();
-				var top = span.offsetTop - selectedNode.scrollTop + rect.top;
+				var top = rect.top;
 
 				return top;
 			}
 
 			zss_editor.calculateEditorHeightWithCaretPosition = function() {
-				// var caretYPosition = zss_editor.getCaretYPosition();
-				var caretYPosition = 0;
+				var caretYPosition = zss_editor.getCaretYPosition();
 				var lineHeight = 20;
-				var halfLineHeight = lineHeight/2;
 				var offsetY = window.document.body.scrollTop;
 				var editorHeight = zss_editor.editorHeight;
 				var newPos;
 
-				var futureEditorHeight = caretYPosition + lineHeight;
-				if (caretYPosition < offsetY) {
-					newPos = caretYPosition;
-				} else if (futureEditorHeight > editorHeight + offsetY) {
-					newPos = futureEditorHeight - editorHeight + halfLineHeight;
+				if (caretYPosition > editorHeight + (lineHeight * 3)) {
+					newPos = (caretYPosition + offsetY) - editorHeight - (lineHeight * 2);
 				}
 
 				if (newPos) {
