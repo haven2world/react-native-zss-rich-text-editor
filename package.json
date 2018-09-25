@@ -10,7 +10,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "react-lifecycles-compat": "^3.0.4",
-    "react-native-webview-bridge-updated": "https://github.com/classcraft/react-native-webview-bridge#pod"
+    "react-native-webview-bridge-updated": "https://github.com/classcraft/react-native-webview-bridge#rn-0.57"
   },
   "peerDependencies": {
     "react": "*",
